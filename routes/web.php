@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/products')->name('root');
-
-Route::get('products', 'ProductsController@index')->name('products.index');
-Route::get('products/{product}', 'ProductsController@show')->name('products.show');
-
+Route::redirect('/', 'PagesController@root')->name('root');
 Auth::routes();
+
+Auth::routes(['verify' => true]);
+Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
 
 // auth 中间件代表需要登录，verified中间件代表需要经过邮箱验证
 Route::group(['middleware' => ['auth']], function() {
@@ -31,4 +30,9 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
+    
 });
+
+Route::redirect('/', '/products')->name('root');
+Route::get('products', 'ProductsController@index')->name('products.index');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show');
