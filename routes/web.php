@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', 'PagesController@root')->name('root');
-Auth::routes();
+// Route::redirect('/', 'PagesController@root')->name('root');
+Route::redirect('/', '/products')->name('root');
+Route::get('products', 'ProductsController@index')->name('products.index');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show')->where(['product' => '[0-9]+']);;
 
-Auth::routes(['verify' => true]);
-Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
+Auth::routes();
 
 // auth 中间件代表需要登录，verified中间件代表需要经过邮箱验证
 Route::group(['middleware' => ['auth']], function() {
@@ -28,11 +29,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('user_addresses/{user_address}', 'UserAddressesController@update')->name('user_addresses.update');
     Route::delete('user_addresses/{user_address}', 'UserAddressesController@destroy')->name('user_addresses.destroy');
 
+    Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
     
+    Route::post('cart', 'CartController@add')->name('cart.add');
 });
 
-Route::redirect('/', '/products')->name('root');
-Route::get('products', 'ProductsController@index')->name('products.index');
-Route::get('products/{product}', 'ProductsController@show')->name('products.show');
