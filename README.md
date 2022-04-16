@@ -7,3 +7,8 @@ npm run watch-poll
 ```
 php artisan storage:link
 ```
+
+## 启动队列处理器
+```
+php artisan queue:work
+```
