@@ -16,8 +16,9 @@ class CartController extends Controller
     {
         // with(['productSku.product']) 方法用来预加载购物车里的商品和 SKU，避免$item->productSku->product 这种懒加载方式执行多次sql的N+1问题
         $cartItems = $request->user()->cartItems()->with(['productSku.product'])->get();
+        $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
 
-        return view('cart.index', ['cartItems' => $cartItems]);
+        return view('cart.index', ['cartItems' => $cartItems, 'addresses' => $addresses]);
     }
 
     /**
